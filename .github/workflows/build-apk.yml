@@ -35,6 +35,7 @@ jobs:
 
       - name: Build APK
         run: |
+          echo "kotlin.jvm.target.validation.mode=warning" >> "$PROJECT_DIR/gradle.properties"
           cd "$PROJECT_DIR"
           gradle assembleDebug
 
