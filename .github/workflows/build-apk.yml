@@ -21,7 +21,17 @@ jobs:
           SETTINGS=$(find extracted -name settings.gradle -type f | head -1)
           PROJECT_DIR=$(dirname "$SETTINGS")
           echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+      - name: Fix OkHttp imports
+        run: |
+          FILE="$PROJECT_DIR/app/src/main/java/com/foryourecap/app/MainActivity.kt"
 
+          grep -q 'MediaType.Companion.toMediaType' "$FILE" || \
+          sed -i '/^package /a\
+import okhttp3.MediaType.Companion.toMediaType' "$FILE"
+
+          grep -q 'RequestBody.Companion.toRequestBody' "$FILE" || \
+          sed -i '/^package /a\
+import okhttp3.RequestBody.Companion.toRequestBody' "$FILE"
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
